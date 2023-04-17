@@ -1,8 +1,3 @@
 export const App = () => {
-
-  var gg = 40;
-
-  return (
-    <div>Hello</div>
-  )
+  return <h1>Hello</h1>
 }
