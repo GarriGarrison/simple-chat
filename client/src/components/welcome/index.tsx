@@ -3,7 +3,7 @@ import welcome from '@/assets/img/welcome.jpg'
 import { IProps } from './props'
 
 
-export const Welcome: FC<IProps> = ({ onAbort }) => {
+export const Welcome: FC<IProps> = ({ onAbort, onConnect }) => {
 
   const [name, setName] = useState('')
   const [isDisabled, setIsDisabled] = useState(true)
@@ -14,12 +14,16 @@ export const Welcome: FC<IProps> = ({ onAbort }) => {
     setIsDisabled(!event.target.value)
   }
 
+  const handleConnect = () => {
+    onConnect(name)
+  }
+
 
   return (
     <div>
       <img src={welcome} alt="welcome" width="728px" height="409px" />
       <input value={name} onChange={handleInput} />
-      <button disabled={isDisabled}>Yes</button>
+      <button disabled={isDisabled} onClick={handleConnect}>Yes</button>
       <button onClick={onAbort}>No</button>
     </div>
   )

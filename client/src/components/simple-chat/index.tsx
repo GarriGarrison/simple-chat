@@ -15,6 +15,11 @@ export const SimpleChat: FC<IProps> = () => {
     setIsAbort(true)
   }
 
+  const handleConnect = (name: string) => {
+    console.log('name', name)  //* debug
+    setIsWelcome(false)
+  }
+
 
   if (isAbort) {
     return <img src={abort} alt="abort" width="100%" height="99%" />
@@ -23,7 +28,7 @@ export const SimpleChat: FC<IProps> = () => {
   if (isWelcome) {
     return (
       <div className={styles.centered}>
-        <Welcome onAbort={handleAbort} />
+        <Welcome onAbort={handleAbort} onConnect={handleConnect} />
       </div>
     )
   }
