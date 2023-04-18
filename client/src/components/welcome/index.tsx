@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from 'react'
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
 import welcome from '@/assets/img/welcome.jpg'
 import { IProps } from './props'
 import styles from './index.module.css'
@@ -8,6 +8,12 @@ export const Welcome: FC<IProps> = ({ onAbort, onConnect }) => {
 
   const [name, setName] = useState('')
   const [isDisabled, setIsDisabled] = useState(true)
+
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  },[])
 
 
   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +30,7 @@ export const Welcome: FC<IProps> = ({ onAbort, onConnect }) => {
     <div className={styles.container}>
       <h1 className={styles.title}>Кто Вы, мистер Андерсон?</h1>
       {name.length > 2 && <img src={welcome} alt="welcome" width="728px" height="409px" />}
-      <input value={name} onChange={handleInput} className={styles.input_name} />
+      <input ref={inputRef} value={name} onChange={handleInput} className={styles.input_name} />
       <button disabled={isDisabled} onClick={handleConnect} className={styles.btn_connect}>
         Yes
       </button>
