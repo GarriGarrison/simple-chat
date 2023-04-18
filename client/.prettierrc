@@ -10,5 +10,5 @@
   "trailingComma": "none",
   "endOfLine": "auto",
   "htmlWhitespaceSensitivity": "ignore",
-  "arrowParens": "avoid"
+  "arrowParens": "always"
 }
