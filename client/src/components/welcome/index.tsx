@@ -3,9 +3,12 @@ import welcome from '@/assets/img/welcome.jpg'
 import { IProps } from './props'
 import styles from './index.module.css'
 
+
 export const Welcome: FC<IProps> = ({ onAbort, onConnect }) => {
+
   const [name, setName] = useState('')
   const [isDisabled, setIsDisabled] = useState(true)
+
 
   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value)
@@ -16,6 +19,7 @@ export const Welcome: FC<IProps> = ({ onAbort, onConnect }) => {
     onConnect(name)
   }
 
+  
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Кто Вы, мистер Андерсон?</h1>
