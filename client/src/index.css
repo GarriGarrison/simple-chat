@@ -2,6 +2,10 @@
   font-family: Roboto, Aria, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+
+  --color-black: #0d0d0d;
+  --color-green: #54ca25;
+  --border-radius: 5px;
 }
 
 *,
@@ -29,6 +33,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
+  background-color: #0d0d0d;
 }
 
 h1 {
