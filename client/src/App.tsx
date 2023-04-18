@@ -1,3 +1,8 @@
-export const App = () => {
-  return <h1>Hello</h1>
-}
+import { FC } from 'react'
+import { SimpleChat } from '@/components/simple-chat'
+
+
+export const App: FC = () => (
+    <SimpleChat />
+)
+
