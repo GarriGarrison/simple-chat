@@ -47,6 +47,6 @@
     "react/jsx-wrap-multilines": "error", // оборачивайте в скобки JSX теги, когда они занимают больше одной строки
     "react/self-closing-comp": "error", // всегда используйте самозакрывающиеся теги
     "@typescript-eslint/no-explicit-any": "warn",
-    "keyword-spacing": "error"  // отступы после ключевых слов (if, switch, ...)
+    "keyword-spacing": "error" // отступы после ключевых слов (if, switch, ...)
   }
 }
