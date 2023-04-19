@@ -28,16 +28,29 @@
     font-weight: bold;
 }
 
+@font-face {
+    font-family: Styrene;
+    src: url("assets/fonts/Roboto-Thin.ttf");
+    font-weight: thin;
+}
+
 html,
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
-  background-color: #0d0d0d;
+  background-color: var(--color-black);
+  color: var(--color-green);
+
 }
 
 h1 {
   font-size: 3.2em;
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: 1.6em;
   line-height: 1.1;
 }
 

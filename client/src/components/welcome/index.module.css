@@ -8,7 +8,6 @@
   position: absolute;
   left: 60px;
   top: -100px;
-  color: var(--color-green);
 }
 
 .btn_connect {
@@ -45,6 +44,7 @@
   border-radius: var(--border-radius);
   color: var(--color-green);
   background-color: var(--color-black);
+  padding: 0.5em;
 }
 
 .input_name:focus,
