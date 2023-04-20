@@ -3,3 +3,8 @@ export type Message = {
   text: string
   date: Date
 }
+
+export type Surrogate = {
+  id: string
+  name: string
+}

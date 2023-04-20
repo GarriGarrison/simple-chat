@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { Welcome } from '@/components/welcome'
 import { MessageCard } from '@/components/message-card'
 import abort from '@/assets/img/abort.jpg'
@@ -7,13 +7,29 @@ import styles from './index.module.css'
 import { Message } from '@/types'
 
 
+const ws = new WebSocket('ws://localhost:5000')
+
+
 export const SimpleChat: FC<IProps> = () => {
 
   const [isWelcome, setIsWelcome] = useState(true)
   const [isAbort, setIsAbort] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
-  const [surrogate, setSurrogate] = useState('')
+  const [surrogate, setSurrogate] = useState('000')
   const newMessage = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    ws.addEventListener('message', (event) => {
+      console.log('mesSSI', event.data) //* debag
+    })
+  }, [])
+
+  useEffect(() => {
+    if (!isWelcome) {
+      const mes = JSON.stringify({ type: 'ADD_SURROGATE', data: surrogate })
+      ws.send(mes)
+    }
+  }, [isWelcome])
 
 
   const handleAbort = () => {
