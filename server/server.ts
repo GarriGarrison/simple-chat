@@ -9,20 +9,14 @@ interface ExtWebSocket extends WebSocket {
 
 type MessageSocket = {
   type: string;
-  data: string | Message;
-};
-
-type Message = {
-  text: string;
-  author: string;
-  date: string;
+  data: string;
 };
 
 // const port = config.server || 5000;
 const port = 5000;
 const app = express();
 
-const surrogateList = ['test'];
+const surrogateList: string[] = [];
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
@@ -43,17 +37,20 @@ wss.on('connection', (ws: ExtWebSocket) => {
 
     switch (mess.type) {
       case 'ADD_SURROGATE':
+        surrogateList.push(mess.data as string);
         wss.clients.forEach((client) => {
-          surrogateList.push(mess.data as string);
           const mes = JSON.stringify({ type: 'ADD_SURROGATE', data: surrogateList });
           client.send(mes);
         });
         break;
-      case 'NEW_MESSAGE':
+      case 'NEW_MESSAGE': {
+        const mesData = JSON.stringify(mess.data);
         wss.clients.forEach((client) => {
-          const mes = JSON.stringify({ type: 'NEW_MESSAGE', data: surrogateList });
+          const mes = JSON.stringify({ type: 'NEW_MESSAGE', data: mesData });
           client.send(mes);
         });
+        break;
+      }
     }
 
     //* Обработка широковещательных запросов

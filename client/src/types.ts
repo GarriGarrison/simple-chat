@@ -11,5 +11,5 @@ export type Surrogate = {
 
 export type MessageSocket = {
   type: string
-  data: string[] | Message
+  data: string | string[] | Message
 }
