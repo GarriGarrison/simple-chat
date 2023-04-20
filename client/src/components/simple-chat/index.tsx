@@ -4,7 +4,7 @@ import { MessageCard } from '@/components/message-card'
 import abort from '@/assets/img/abort.jpg'
 import { IProps } from './props'
 import styles from './index.module.css'
-import { Message } from '@/types'
+import { Message, MessageSocket } from '@/types'
 
 
 const ws = new WebSocket('ws://localhost:5000')
@@ -16,11 +16,21 @@ export const SimpleChat: FC<IProps> = () => {
   const [isAbort, setIsAbort] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
   const [surrogate, setSurrogate] = useState('000')
+  const [surrogates, setSurrogates] = useState<string[]>([])
   const newMessage = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     ws.addEventListener('message', (event) => {
-      console.log('mesSSI', event.data) //* debag
+      // console.log('mesSSI', event.data) //* debag
+      const mesSocket: MessageSocket = JSON.parse(event.data)
+      console.log('mesSocket', mesSocket)
+      
+
+      switch (mesSocket.type) {
+        case 'ADD_SURROGATE':
+          setSurrogates([...mesSocket.data as string[]])
+          break
+      }
     })
   }, [])
 
@@ -72,7 +82,10 @@ export const SimpleChat: FC<IProps> = () => {
         <div className={styles.sub_container}>
           <div className={styles.mes_add}>
             <input ref={newMessage} className={styles.input_message} />
-            <button onClick={handleSendMessage} className={styles.btn_add}> &#62;&#62;&#62; </button>
+            <button onClick={handleSendMessage} className={styles.btn_add}>
+              {' '}
+              &#62;&#62;&#62;{' '}
+            </button>
           </div>
           <div className={styles.list}>
             {messages.map((mes) => (
@@ -83,7 +96,11 @@ export const SimpleChat: FC<IProps> = () => {
 
         <div className={styles.mes_container}>
           <h2 className={styles.title}>Подключены к матрице</h2>
-          <div className={styles.list}>Test</div>
+          <div className={styles.list}>
+            {surrogates.map((surrogate, index) => (
+              <div key={index}>{surrogate}</div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

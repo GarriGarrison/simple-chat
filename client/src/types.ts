@@ -8,3 +8,8 @@ export type Surrogate = {
   id: string
   name: string
 }
+
+export type MessageSocket = {
+  type: string
+  data: string[] | Message
+}
