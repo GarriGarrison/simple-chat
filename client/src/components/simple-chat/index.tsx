@@ -1,4 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react'
+import cn from 'classnames'
 import { Welcome } from '@/components/welcome'
 import { MessageCard } from '@/components/message-card'
 import abort from '@/assets/img/abort.jpg'
@@ -96,7 +97,9 @@ export const SimpleChat: FC<IProps> = () => {
           </div>
           <div className={styles.list}>
             {messages.map((mes, index) => (
-              <MessageCard key={index} text={mes.text} author={mes.author} date={mes.date} />
+              <div className={cn(styles.mes_wrapper, { [styles.mes_author]: mes.author === surrogate })}>
+                <MessageCard key={index} text={mes.text} author={mes.author} date={mes.date} />
+              </div>
             ))}
           </div>
         </div>

@@ -28,6 +28,14 @@
   gap: 0.5em;
 }
 
+.mes_wrapper {
+  display: flex;
+}
+
+.mes_author {
+  justify-content: end; ;
+}
+
 .list {
   overflow-y: auto;
   word-wrap: break-word;
