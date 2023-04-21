@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
 import { Welcome } from '@/components/welcome'
 import { MessageCard } from '@/components/message-card'
@@ -18,7 +18,12 @@ export const SimpleChat: FC<IProps> = () => {
   const [messages, setMessages] = useState<Message[]>([])
   const [surrogate, setSurrogate] = useState('000')
   const [surrogates, setSurrogates] = useState<string[]>([])
+
   const newMessage = useRef<HTMLInputElement>(null)
+
+
+  // const inputRef = useRef<HTMLInputElement>(null)
+
 
   useEffect(() => {
     ws.addEventListener('message', (event) => {
@@ -40,6 +45,10 @@ export const SimpleChat: FC<IProps> = () => {
       ws.removeEventListener('message', () => {})
     }
   }, [])
+
+  useEffect(() => {
+    newMessage.current?.focus()
+  }, [isWelcome])
 
   useEffect(() => {
     if (!isWelcome) {
@@ -68,6 +77,14 @@ export const SimpleChat: FC<IProps> = () => {
 
       const mes = JSON.stringify({ type: 'NEW_MESSAGE', data: newMes })
       ws.send(mes)
+
+      newMessage.current.value = ''
+    }
+  }
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSendMessage()
     }
   }
 
@@ -89,7 +106,7 @@ export const SimpleChat: FC<IProps> = () => {
       <div className={styles.container}>
         <div className={styles.sub_container}>
           <div className={styles.mes_add}>
-            <input ref={newMessage} className={styles.input_message} />
+            <input ref={newMessage} onKeyDown={handleKeyDown} className={styles.input_message} />
             <button onClick={handleSendMessage} className={styles.btn_add}>
               {' '}
               &#62;&#62;&#62;{' '}
