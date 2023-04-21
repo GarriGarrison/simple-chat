@@ -22,9 +22,6 @@ export const SimpleChat: FC<IProps> = () => {
   const newMessage = useRef<HTMLInputElement>(null)
 
 
-  // const inputRef = useRef<HTMLInputElement>(null)
-
-
   useEffect(() => {
     ws.addEventListener('message', (event) => {
       const mesSocket: MessageSocket = JSON.parse(event.data)
@@ -33,6 +30,7 @@ export const SimpleChat: FC<IProps> = () => {
         case 'ADD_SURROGATE':
           setSurrogates([...(mesSocket.data as string[])])
           break
+        case 'GET_MESSAGE':
         case 'NEW_MESSAGE': {
           const mes: Message[] = JSON.parse(mesSocket.data as string)
           setMessages([...mes])
@@ -52,8 +50,11 @@ export const SimpleChat: FC<IProps> = () => {
 
   useEffect(() => {
     if (!isWelcome) {
-      const mes = JSON.stringify({ type: 'ADD_SURROGATE', data: surrogate })
-      ws.send(mes)
+      const mesConnect = JSON.stringify({ type: 'ADD_SURROGATE', data: surrogate })
+      ws.send(mesConnect)
+
+      const mesGetMessage = JSON.stringify({ type: 'GET_MESSAGE', data: null })
+      ws.send(mesGetMessage)
     }
   }, [isWelcome])
 
@@ -113,9 +114,9 @@ export const SimpleChat: FC<IProps> = () => {
             </button>
           </div>
           <div className={styles.list}>
-            {messages.map((mes, index) => (
+            {messages.map((mes) => (
               <div className={cn(styles.mes_wrapper, { [styles.mes_author]: mes.author === surrogate })}>
-                <MessageCard key={index} text={mes.text} author={mes.author} date={mes.date} />
+                <MessageCard key={mes.date.toLocaleString()} text={mes.text} author={mes.author} date={mes.date} />
               </div>
             ))}
           </div>

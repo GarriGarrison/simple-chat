@@ -50,6 +50,7 @@ wss.on('connection', (ws: ExtWebSocket) => {
           client.send(mes);
         });
         break;
+      
       case 'NEW_MESSAGE': {
         messageList.unshift(mess.data as Message);
 
@@ -64,6 +65,12 @@ wss.on('connection', (ws: ExtWebSocket) => {
         });
         break;
       }
+        
+      case 'GET_MESSAGE':
+        const mesData = JSON.stringify(messageList);
+        const mes = JSON.stringify({ type: 'GET_MESSAGE', data: mesData });
+        ws.send(mes);
+        break;
     }
 
     //* Обработка широковещательных запросов
