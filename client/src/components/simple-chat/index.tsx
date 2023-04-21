@@ -5,7 +5,7 @@ import { MessageCard } from '@/components/message-card'
 import abort from '@/assets/img/abort.jpg'
 import { IProps } from './props'
 import styles from './index.module.css'
-import { Message, MessageSocket } from '@/types'
+import { EventsSocket, Message } from '@/types'
 
 
 const ws = new WebSocket('ws://localhost:5000')
@@ -24,15 +24,17 @@ export const SimpleChat: FC<IProps> = () => {
 
   useEffect(() => {
     ws.addEventListener('message', (event) => {
-      const mesSocket: MessageSocket = JSON.parse(event.data)
+      const mesSocket: EventsSocket = JSON.parse(event.data)
+      console.log('mesSocket', mesSocket);
+      
 
       switch (mesSocket.type) {
         case 'ADD_SURROGATE':
-          setSurrogates([...(mesSocket.data as string[])])
+          setSurrogates([...(mesSocket.data)])
           break
         case 'GET_MESSAGE':
         case 'NEW_MESSAGE': {
-          const mes: Message[] = JSON.parse(mesSocket.data as string)
+          const mes: Message[] = JSON.parse(mesSocket.data)
           setMessages([...mes])
           break
         }

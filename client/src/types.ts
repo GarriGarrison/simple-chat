@@ -9,7 +9,15 @@ export type Surrogate = {
   name: string
 }
 
-export type MessageSocket = {
-  type: string
-  data: string | string[] | Message
+
+type SurrogateSocket = {
+  type: 'ADD_SURROGATE'
+  data: string[]
 }
+
+type MessageSocket = {
+  type: 'GET_MESSAGE' | 'NEW_MESSAGE'
+  data: string
+}
+
+export type EventsSocket = SurrogateSocket | MessageSocket

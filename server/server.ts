@@ -1,22 +1,14 @@
 import http from 'http';
 import express from 'express';
 import WebSocket from 'ws';
+import { EventsSocket, Message } from 'src/type';
+
 
 interface ExtWebSocket extends WebSocket {
   id?: string; // your custom property
   isAlive: boolean;
 }
 
-type MessageSocket = {
-  type: string;
-  data: string | Message;
-};
-
-export type Message = {
-  author: string;
-  text: string;
-  date: Date;
-};
 
 // const port = config.server || 5000;
 const port = 5000;
@@ -40,11 +32,11 @@ wss.on('connection', (ws: ExtWebSocket) => {
     //* log the received message and send it back to the client
     // console.log('received: %s', message);
 
-    const mess: MessageSocket = JSON.parse(message);
+    const mess: EventsSocket = JSON.parse(message);
 
     switch (mess.type) {
       case 'ADD_SURROGATE':
-        surrogateList.unshift(mess.data as string);
+        surrogateList.unshift(mess.data);
         wss.clients.forEach((client) => {
           const mes = JSON.stringify({ type: 'ADD_SURROGATE', data: surrogateList });
           client.send(mes);
@@ -52,7 +44,7 @@ wss.on('connection', (ws: ExtWebSocket) => {
         break;
       
       case 'NEW_MESSAGE': {
-        messageList.unshift(mess.data as Message);
+        messageList.unshift(mess.data);
 
         if (messageList.length > 100) {
           messageList.pop();
@@ -90,6 +82,7 @@ wss.on('connection', (ws: ExtWebSocket) => {
     // }
   });
 });
+
 
 setInterval(() => {
   wss.clients.forEach((ws: WebSocket) => {
