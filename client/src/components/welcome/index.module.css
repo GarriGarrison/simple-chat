@@ -53,3 +53,9 @@
   outline: 0;
   outline-offset: 0;
 }
+
+.img_welcome {
+  display: flex;
+  justify-content: center;
+  padding-top: 5em;
+}

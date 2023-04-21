@@ -41,8 +41,17 @@ export const Welcome: FC<IProps> = ({ onAbort, onConnect }) => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Кто Вы, мистер Андерсон?</h1>
-      {name.length > 2 && <img src={welcome} alt="welcome" width="728px" height="409px" />}
-      <input ref={inputRef} value={name} onChange={handleInput} onKeyDown={handleKeyDown} className={styles.input_name} />
+      {name.length > 2 &&
+        <div className={styles.img_welcome}>
+          <img src={welcome} alt="welcome" width="250px" height="225px" />
+        </div>}
+      <input
+        ref={inputRef}
+        value={name}
+        onChange={handleInput}
+        onKeyDown={handleKeyDown}
+        className={styles.input_name}
+      />
       <button disabled={isDisabled} onClick={handleConnect} className={styles.btn_connect}>
         Yes
       </button>
