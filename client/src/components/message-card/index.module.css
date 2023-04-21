@@ -1,19 +1,18 @@
 .container {
   border: 1px solid var(--color-green);
   border-radius: var(--border-radius);
-  height: 5em;
+  min-height: 5em;
   width: 250px;
+  padding: .5em;
   background-color: var(--color-black);
   color: var(--color-green);
 }
 
 .meta {
-  font-weight: thin;
   font-size: .8em;
   color: gray;
   display: flex;
   justify-content: end;
-  padding-right: 1em;
 }
 
 .text {

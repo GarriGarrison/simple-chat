@@ -122,7 +122,7 @@ export const SimpleChat: FC<IProps> = () => {
           </div>
         </div>
 
-        <div className={styles.mes_container}>
+        <div className={styles.sub_container}>
           <h2 className={styles.title}>Подключены к матрице</h2>
           <div className={styles.list}>
             {surrogates.map((surrogate, index) => (

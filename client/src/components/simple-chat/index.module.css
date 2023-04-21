@@ -2,14 +2,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80vh;
+  height: 100vh;
+  padding: 2.5em;
 }
 
 .container {
   border: 2px solid var(--color-green);
   border-radius: var(--border-radius);
   width: 800px;
-  height: 1000px;
+  height: 100%;
   display: flex;
   gap: 3em;
 }
@@ -37,7 +38,6 @@
 }
 
 .list {
-  overflow-y: auto;
   word-wrap: break-word;
   display: flex;
   flex-direction: column;
