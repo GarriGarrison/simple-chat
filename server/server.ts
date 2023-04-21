@@ -9,7 +9,13 @@ interface ExtWebSocket extends WebSocket {
 
 type MessageSocket = {
   type: string;
-  data: string;
+  data: string | Message;
+};
+
+export type Message = {
+  author: string;
+  text: string;
+  date: Date;
 };
 
 // const port = config.server || 5000;
@@ -17,6 +23,7 @@ const port = 5000;
 const app = express();
 
 const surrogateList: string[] = [];
+const messageList: Message[] = [];
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
@@ -31,7 +38,7 @@ wss.on('connection', (ws: ExtWebSocket) => {
   //* connection is up, let's add a simple simple event
   ws.on('message', (message: string) => {
     //* log the received message and send it back to the client
-    console.log('received: %s', message);
+    // console.log('received: %s', message);
 
     const mess: MessageSocket = JSON.parse(message);
 
@@ -44,7 +51,13 @@ wss.on('connection', (ws: ExtWebSocket) => {
         });
         break;
       case 'NEW_MESSAGE': {
-        const mesData = JSON.stringify(mess.data);
+        messageList.unshift(mess.data as Message);
+
+        if (messageList.length > 100) {
+          messageList.pop();
+        }
+
+        const mesData = JSON.stringify(messageList);
         wss.clients.forEach((client) => {
           const mes = JSON.stringify({ type: 'NEW_MESSAGE', data: mesData });
           client.send(mes);

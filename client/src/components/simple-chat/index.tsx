@@ -28,18 +28,16 @@ export const SimpleChat: FC<IProps> = () => {
           setSurrogates([...(mesSocket.data as string[])])
           break
         case 'NEW_MESSAGE': {
-          const newMes: Message = JSON.parse(mesSocket.data as string)
-          console.log('gg', messages, newMes)
-          
-          if ( messages[0] === undefined || messages[0].date !== newMes.date) {
-            setMessages((prev) => [newMes, ...prev])
-          // } else if (messages[0] || messages[0].date !== newMes.date) {
-          //   setMessages((prev) => [newMes, ...prev])
-          }
+          const mes: Message[] = JSON.parse(mesSocket.data as string)
+          setMessages([...mes])
           break
         }
       }
     })
+
+    return () => {
+      ws.removeEventListener('message', () => {})
+    }
   }, [])
 
   useEffect(() => {
