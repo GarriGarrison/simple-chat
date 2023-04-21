@@ -44,7 +44,7 @@ wss.on('connection', (ws: ExtWebSocket) => {
 
     switch (mess.type) {
       case 'ADD_SURROGATE':
-        surrogateList.push(mess.data as string);
+        surrogateList.unshift(mess.data as string);
         wss.clients.forEach((client) => {
           const mes = JSON.stringify({ type: 'ADD_SURROGATE', data: surrogateList });
           client.send(mes);
