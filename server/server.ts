@@ -1,6 +1,7 @@
 import http from 'http';
 import express from 'express';
 import WebSocket from 'ws';
+import * as dotenv from 'dotenv'
 import { EventsSocket, Message } from 'src/type';
 
 
@@ -9,9 +10,11 @@ interface ExtWebSocket extends WebSocket {
   isAlive: boolean;
 }
 
+dotenv.config();
 
-// const port = config.server || 5000;
-const port = 5000;
+
+// const port = config.server || 3001;
+const port = process.env.PORT || 3001;
 const app = express();
 
 const surrogateList: string[] = [];
