@@ -1,7 +1,7 @@
 import http from 'http';
 import express from 'express';
 import WebSocket from 'ws';
-import * as dotenv from 'dotenv'
+import * as dotenv from 'dotenv';
 import { EventsSocket, Message } from 'src/type';
 
 
@@ -10,8 +10,8 @@ interface ExtWebSocket extends WebSocket {
   isAlive: boolean;
 }
 
-dotenv.config();
 
+dotenv.config();
 
 // const port = config.server || 3001;
 const port = process.env.PORT || 3001;
@@ -22,6 +22,7 @@ const messageList: Message[] = [];
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
+
 
 wss.on('connection', (ws: ExtWebSocket) => {
   ws.isAlive = true;
