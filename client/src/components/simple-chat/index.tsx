@@ -21,7 +21,7 @@ export const SimpleChat: FC<IProps> = () => {
   useEffect(() => {
     ws.addEventListener('message', (event) => {
       const mesSocket: EventsSocket = JSON.parse(event.data)
-      console.log('mesSocket', mesSocket)
+      // console.log('mesSocket', mesSocket)
 
       switch (mesSocket.type) {
         case 'ADD_SURROGATE':
@@ -47,9 +47,27 @@ export const SimpleChat: FC<IProps> = () => {
 
   useEffect(() => {
     if (!isWelcome) {
-      ws.onopen = () => console.log('Соединение установлено')
+      ws.onopen = () => {
+        console.log('Соединение установлено')
 
-      ws.onclose = function (event) {
+        // const mes = {
+        //   type: 'ADD_SURROGATE',
+        //   data: {
+        //     id: Date.now(),
+        //     surrogate
+        //   }
+        // }
+
+        // ws.send(mes)
+      }
+
+      //* 2-й способ обработки получения сообщения
+      // ws.onmessage = (event) => {
+      //   const mesSocket: EventsSocket = JSON.parse(event.data)
+      //   // логика обработки
+      // }
+
+      ws.onclose = (event) => {
         if (event.wasClean) {
           console.log('Соединение закрыто чисто')
         } else {
@@ -58,7 +76,7 @@ export const SimpleChat: FC<IProps> = () => {
         console.log(`Код: ${event.code} причина: ${event.reason}`)
       }
 
-      ws.onerror = function (error) {
+      ws.onerror = (error) => {
         console.log(`Ошибка ${(error as ErrorEvent).message}`)
       }
 
