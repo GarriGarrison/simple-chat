@@ -7,12 +7,9 @@ import { IProps } from './props'
 import styles from './index.module.css'
 import { EventsSocket, Message } from '@/types'
 
-
 const ws = new WebSocket('ws://localhost:5000')
 
-
 export const SimpleChat: FC<IProps> = () => {
-
   const [isWelcome, setIsWelcome] = useState(true)
   const [isAbort, setIsAbort] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
@@ -21,16 +18,14 @@ export const SimpleChat: FC<IProps> = () => {
 
   const newMessage = useRef<HTMLInputElement>(null)
 
-
   useEffect(() => {
     ws.addEventListener('message', (event) => {
       const mesSocket: EventsSocket = JSON.parse(event.data)
-      console.log('mesSocket', mesSocket);
-      
+      console.log('mesSocket', mesSocket)
 
       switch (mesSocket.type) {
         case 'ADD_SURROGATE':
-          setSurrogates([...(mesSocket.data)])
+          setSurrogates([...mesSocket.data])
           break
         case 'GET_MESSAGE':
         case 'NEW_MESSAGE': {
@@ -52,6 +47,21 @@ export const SimpleChat: FC<IProps> = () => {
 
   useEffect(() => {
     if (!isWelcome) {
+      ws.onopen = () => console.log('Соединение установлено')
+
+      ws.onclose = function (event) {
+        if (event.wasClean) {
+          console.log('Соединение закрыто чисто')
+        } else {
+          console.log('Обрыв соединения') // например, "убит" процесс сервера
+        }
+        console.log(`Код: ${event.code} причина: ${event.reason}`)
+      }
+
+      ws.onerror = function (error) {
+        console.log(`Ошибка ${(error as ErrorEvent).message}`)
+      }
+
       const mesConnect = JSON.stringify({ type: 'ADD_SURROGATE', data: surrogate })
       ws.send(mesConnect)
 
@@ -59,7 +69,6 @@ export const SimpleChat: FC<IProps> = () => {
       ws.send(mesGetMessage)
     }
   }, [isWelcome])
-
 
   const handleAbort = () => {
     setIsAbort(true)
@@ -91,7 +100,6 @@ export const SimpleChat: FC<IProps> = () => {
     }
   }
 
-  
   if (isAbort) {
     return <img src={abort} alt="abort" width="100%" height="99%" />
   }

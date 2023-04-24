@@ -1,53 +1,63 @@
 {
-  "extends": ["react-app"],
-  "rules": {
-    "no-var": "error", // ключевое слово var
-    "no-unused-vars": "warn", // не используемые переменные
-    "prefer-destructuring": "error", // использовать деструктуризацию
-    "prefer-template": "error", // шаблонные строки
-    "template-curly-spacing": "error", // вместо конкатенации
-    "no-useless-escape": "warn", // необязательные экранирующие символы
-    "prefer-rest-params": "error", // никогда не используйте arguments, вместо этого используйте синтаксис оставшихся параметров
-    "no-param-reassign": "error", // не переназначайте параметры
-    "prefer-spread": "warn", // предпочтение использованию оператора расширения
-    "prefer-arrow-callback": "error", //используйте стрелочную функцию
-    "arrow-spacing": "error", // используйте стрелочную функцию
-    "arrow-parens": "warn", // оборачивайте аргументы круглыми скобками
-    "arrow-body-style": "error", // используйте неявное возвращение
-    "no-confusing-arrow": "warn", // избегайте схожести стрелочной функции с операторами сравнения
-    "no-useless-constructor": "warn", // можно опустить пустой конструктор
-    "no-dupe-class-members": "error", // избегайте дублирующих членов класса
-    "class-methods-use-this": "error", // метод класса должен использовать this
-    "no-duplicate-imports": "error", // импортируйте из пути только один раз
-    "import/no-mutable-exports": "error", // не экспортируйте изменяемые переменные
-    "import/first": "error", // все импорты выше остальных инструкций
-    "import/no-webpack-loader-syntax": "error",
-    "dot-notation": "warn", // используйте точечную нотацию для доступа к свойствам
-    "prefer-const": "warn", // используйте const для объявления переменных
-    "no-const-assign": "warn", // используйте const для объявления переменных
-    "no-case-declarations": "warn", // Используйте фигурные скобки для case и default, если они содержат лексические декларации
-    "no-nested-ternary": "warn", // тернарные операторы не должны быть вложены
-    "no-unneeded-ternary": "warn", // избегайте ненужных тернарных операторов
-    "nonblock-statement-body-position": "error", // используйте фигурные скобки, когда блок кода занимает несколько строк
-    "no-else-return": "warn", // если в блоке if всегда выполняется оператор return, последующий блок else не нужен.
-    "spaced-comment": "error", // начинайте все комментарии с пробела
-    // "max-len": ["warn", { "code": 120, "tabWidth": 2, "ignoreComments": true }], // старайтесь не допускать, чтобы строки были длиннее 120 символов
-    "comma-dangle": "warn", // добавляйте висячие запятые
-    // "semi": "error",
-    "no-new-wrappers": "error", // выполняйте приведение типов в начале инструкции
-    "radix": "error", // используйте Number и parseInt с основанием системы счисления
-    "no-underscore-dangle": "warn", // не используйте в начале или в конце названий
-    "react/no-multi-comp": "error", // включайте только один React компонент в файл
-    "react/jsx-filename-extension": [2, { "extensions": [".jsx", ".tsx"] }], // используйте расширение .jsx | .tsx для компонентов React
-    "react/jsx-closing-bracket-location": "error", // если ваш компонент имеет множество свойств, которые располагаются на нескольких
-    "react/jsx-closing-tag-location": "error", // строчках, то закрывайте тег на новой строке
-    "react/jsx-tag-spacing": "error", // всегда вставляйте один пробел в ваш самозакрывающийся тег
-    "react/jsx-curly-spacing": "error", // не отделяйте фигурные скобки пробелами
-    "react/jsx-boolean-value": "error", // не указывайте значение свойства, когда оно явно true
-    "react/jsx-wrap-multilines": "error", // оборачивайте в скобки JSX теги, когда они занимают больше одной строки
-    "react/self-closing-comp": "error", // всегда используйте самозакрывающиеся теги
-    "@typescript-eslint/no-explicit-any": "warn",
-    "react-hooks/exhaustive-deps": "off", // зависимости useEffect
-    "keyword-spacing": "error" // отступы после ключевых слов (if, switch, ...)
-  }
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": "standard-with-typescript",
+    "overrides": [
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "rules": {
+      "no-var": "error", // ключевое слово var
+      "no-unused-vars": "warn", // не используемые переменные
+      "prefer-destructuring": "error", // использовать деструктуризацию
+      "prefer-template": "error", // шаблонные строки
+      "template-curly-spacing": "error", // вместо конкатенации
+      "no-useless-escape": "warn", // необязательные экранирующие символы
+      "prefer-rest-params": "error", // никогда не используйте arguments, вместо этого используйте синтаксис оставшихся параметров
+      "no-param-reassign": "error", // не переназначайте параметры
+      "prefer-spread": "warn", // предпочтение использованию оператора расширения
+      "prefer-arrow-callback": "error", //используйте стрелочную функцию
+      "arrow-spacing": "error", // используйте стрелочную функцию
+      "arrow-parens": "warn", // оборачивайте аргументы круглыми скобками
+      "arrow-body-style": "error", // используйте неявное возвращение
+      "no-confusing-arrow": "warn", // избегайте схожести стрелочной функции с операторами сравнения
+      "no-useless-constructor": "warn", // можно опустить пустой конструктор
+      "no-dupe-class-members": "error", // избегайте дублирующих членов класса
+      "class-methods-use-this": "error", // метод класса должен использовать this
+      "no-duplicate-imports": "error", // импортируйте из пути только один раз
+      "import/no-mutable-exports": "error", // не экспортируйте изменяемые переменные
+      "import/first": "error", // все импорты выше остальных инструкций
+      "import/no-webpack-loader-syntax": "error",
+      "dot-notation": "warn", // используйте точечную нотацию для доступа к свойствам
+      "prefer-const": "warn", // используйте const для объявления переменных
+      "no-const-assign": "warn", // используйте const для объявления переменных
+      "no-case-declarations": "warn", // Используйте фигурные скобки для case и default, если они содержат лексические декларации
+      "no-nested-ternary": "warn", // тернарные операторы не должны быть вложены
+      "no-unneeded-ternary": "warn", // избегайте ненужных тернарных операторов
+      "nonblock-statement-body-position": "error", // используйте фигурные скобки, когда блок кода занимает несколько строк
+      "no-else-return": "warn", // если в блоке if всегда выполняется оператор return, последующий блок else не нужен.
+      "spaced-comment": "error", // начинайте все комментарии с пробела
+      // "max-len": ["warn", { "code": 120, "tabWidth": 2, "ignoreComments": true }], // старайтесь не допускать, чтобы строки были длиннее 120 символов
+      "comma-dangle": "warn", // добавляйте висячие запятые
+      // "semi": "error",
+      "no-new-wrappers": "error", // выполняйте приведение типов в начале инструкции
+      "radix": "error", // используйте Number и parseInt с основанием системы счисления
+      "no-underscore-dangle": "warn", // не используйте в начале или в конце названий
+      "react/no-multi-comp": "error", // включайте только один React компонент в файл
+      "react/jsx-filename-extension": [2, { "extensions": [".jsx", ".tsx"] }], // используйте расширение .jsx | .tsx для компонентов React
+      "react/jsx-closing-bracket-location": "error", // если ваш компонент имеет множество свойств, которые располагаются на нескольких
+      "react/jsx-closing-tag-location": "error", // строчках, то закрывайте тег на новой строке
+      "react/jsx-tag-spacing": "error", // всегда вставляйте один пробел в ваш самозакрывающийся тег
+      "react/jsx-curly-spacing": "error", // не отделяйте фигурные скобки пробелами
+      "react/jsx-boolean-value": "error", // не указывайте значение свойства, когда оно явно true
+      "react/jsx-wrap-multilines": "error", // оборачивайте в скобки JSX теги, когда они занимают больше одной строки
+      "react/self-closing-comp": "error", // всегда используйте самозакрывающиеся теги
+      "@typescript-eslint/no-explicit-any": "warn",
+      "react-hooks/exhaustive-deps": "off", // зависимости useEffect
+      "keyword-spacing": "error" // отступы после ключевых слов (if, switch, ...)
+    }
 }

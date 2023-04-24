@@ -15,16 +15,38 @@ dotenv.config();
 
 // const port = config.server || 3001;
 const port = process.env.PORT || 3001;
-const app = express();
+const app = express(); 
+const map = new Map();
 
 const surrogateList: string[] = [];
 const messageList: Message[] = [];
 
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({ server, /*clientTracking: false, noServer: true*/ });
+
+server.on('upgrade', (request, socket, head) => {
+  // console.log('Parsing session from request...');
+
+  // sessionParser(request, {}, () => {
+  //   if (!request.session?.user?.id) {
+  //     socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+  //     socket.destroy();
+  //     return;
+  //   }
+
+  //   console.log('Session is parsed!');
+
+  //   wss.handleUpgrade(request, socket, head, (ws) => {
+  //     wss.emit('connection', ws, request);
+  //   });
+  // });
+});
 
 
-wss.on('connection', (ws: ExtWebSocket) => {
+wss.on('connection', (ws: ExtWebSocket, request) => {
+  // const {userId} = request.session;
+
+  // map.set(userId, ws);
   ws.isAlive = true;
 
   ws.on('pong', () => {
@@ -46,7 +68,7 @@ wss.on('connection', (ws: ExtWebSocket) => {
           client.send(mes);
         });
         break;
-      
+
       case 'NEW_MESSAGE': {
         messageList.unshift(mess.data);
 
@@ -61,7 +83,7 @@ wss.on('connection', (ws: ExtWebSocket) => {
         });
         break;
       }
-        
+
       case 'GET_MESSAGE':
         const mesData = JSON.stringify(messageList);
         const mes = JSON.stringify({ type: 'GET_MESSAGE', data: mesData });
@@ -85,8 +107,11 @@ wss.on('connection', (ws: ExtWebSocket) => {
     //   ws.send(`Hello, you sent -> ${message}`);
     // }
   });
-});
 
+  // ws.on('close', () => {
+  //   map.delete(userId);
+  // });
+});
 
 setInterval(() => {
   wss.clients.forEach((ws: WebSocket) => {
