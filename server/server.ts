@@ -13,8 +13,10 @@ interface ExtWebSocket extends WebSocket {
 
 dotenv.config();
 
+const { NODE_ENV, PORT_DEV, PORT_PROD } = process.env;
+
 // const port = config.server || 3001;
-const port = process.env.PORT || 3001;
+const port = (NODE_ENV === 'production' ? PORT_PROD : PORT_DEV) || 3001;
 const app = express(); 
 const map = new Map();
 
