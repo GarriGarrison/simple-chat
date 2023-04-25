@@ -2,7 +2,7 @@ import http from 'http';
 import express from 'express';
 import WebSocket from 'ws';
 import * as dotenv from 'dotenv';
-import { EventsSocket, Message } from 'src/type';
+import { EventsSocket, Message, Surrogate } from 'src/type';
 
 
 interface ExtWebSocket extends WebSocket {
@@ -20,14 +20,14 @@ const port = (NODE_ENV === 'production' ? PORT_PROD : PORT_DEV) || 3001;
 const app = express(); 
 const map = new Map();
 
-const surrogateList: string[] = [];
+const surrogateList: Surrogate[] = [];
 const messageList: Message[] = [];
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server, /*clientTracking: false, noServer: true*/ });
 
 server.on('upgrade', (request, socket, head) => {
-  // console.log('Parsing session from request...');
+  console.log('Parsing session from request...');
 
   // sessionParser(request, {}, () => {
   //   if (!request.session?.user?.id) {
@@ -63,13 +63,16 @@ wss.on('connection', (ws: ExtWebSocket, request) => {
     const mess: EventsSocket = JSON.parse(message);
 
     switch (mess.type) {
-      case 'ADD_SURROGATE':
+      case 'ADD_SURROGATE': {
         surrogateList.unshift(mess.data);
+
+        const mesData = JSON.stringify(surrogateList);
         wss.clients.forEach((client) => {
-          const mes = JSON.stringify({ type: 'ADD_SURROGATE', data: surrogateList });
+          const mes = JSON.stringify({ type: 'ADD_SURROGATE', data: mesData });
           client.send(mes);
         });
         break;
+      }
 
       case 'NEW_MESSAGE': {
         messageList.unshift(mess.data);

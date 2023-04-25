@@ -12,7 +12,7 @@ export type Surrogate = {
 
 type SurrogateSocket = {
   type: 'ADD_SURROGATE'
-  data: string[]
+  data: string
 }
 
 type MessageSocket = {

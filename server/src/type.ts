@@ -4,10 +4,15 @@ export type Message = {
   date: Date;
 };
 
+export type Surrogate = {
+  id: string;
+  name: string;
+};
+
 
 type SurrogateSocket = {
   type: 'ADD_SURROGATE';
-  data: string;
+  data: Surrogate;
 };
 
 type MessageSocket = {

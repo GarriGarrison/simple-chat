@@ -5,41 +5,44 @@ import { MessageCard } from '@/components/message-card'
 import abort from '@/assets/img/abort.jpg'
 import { IProps } from './props'
 import styles from './index.module.css'
-import { EventsSocket, Message } from '@/types'
+import { EventsSocket, Message, Surrogate } from '@/types'
 
-const ws = new WebSocket('ws://localhost:5000')
 
 export const SimpleChat: FC<IProps> = () => {
   const [isWelcome, setIsWelcome] = useState(true)
   const [isAbort, setIsAbort] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
-  const [surrogate, setSurrogate] = useState('000')
-  const [surrogates, setSurrogates] = useState<string[]>([])
+  const [surrogateName, setSurrogateName] = useState('000')
+  const [surrogates, setSurrogates] = useState<Surrogate[]>([])
+
+  const ws = useRef<WebSocket | undefined>()
+  const [isConnected, setIsConnected] = useState(false)
 
   const newMessage = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    ws.addEventListener('message', (event) => {
-      const mesSocket: EventsSocket = JSON.parse(event.data)
-      // console.log('mesSocket', mesSocket)
+  //* 2-й способ обработки получения сообщения
+  // useEffect(() => {
+  //   ws.addEventListener('message', (event) => {
+  //     const mesSocket: EventsSocket = JSON.parse(event.data)
+  //     // console.log('mesSocket', mesSocket)
 
-      switch (mesSocket.type) {
-        case 'ADD_SURROGATE':
-          setSurrogates([...mesSocket.data])
-          break
-        case 'GET_MESSAGE':
-        case 'NEW_MESSAGE': {
-          const mes: Message[] = JSON.parse(mesSocket.data)
-          setMessages([...mes])
-          break
-        }
-      }
-    })
+  //     switch (mesSocket.type) {
+  //       case 'ADD_SURROGATE':
+  //         setSurrogates([...mesSocket.data])
+  //         break
+  //       case 'GET_MESSAGE':
+  //       case 'NEW_MESSAGE': {
+  //         const mes: Message[] = JSON.parse(mesSocket.data)
+  //         setMessages([...mes])
+  //         break
+  //       }
+  //     }
+  //   })
 
-    return () => {
-      ws.removeEventListener('message', () => {})
-    }
-  }, [])
+  //   return () => {
+  //     ws.removeEventListener('message', () => {})
+  //   }
+  // }, [])
 
   useEffect(() => {
     newMessage.current?.focus()
@@ -47,27 +50,46 @@ export const SimpleChat: FC<IProps> = () => {
 
   useEffect(() => {
     if (!isWelcome) {
-      ws.onopen = () => {
+      ws.current = new WebSocket('ws://localhost:5000')
+
+      ws.current.onopen = () => {
         console.log('Соединение установлено')
+        setIsConnected(true)
 
-        // const mes = {
-        //   type: 'ADD_SURROGATE',
-        //   data: {
-        //     id: Date.now(),
-        //     surrogate
-        //   }
-        // }
+        const mesConnect = {
+          type: 'ADD_SURROGATE',
+          data: {
+            id: Date.now(),
+            name: surrogateName
+          }
+        }
 
-        // ws.send(mes)
+        ws.current!.send(JSON.stringify(mesConnect))
+
+        const mesGetMessage = JSON.stringify({ type: 'GET_MESSAGE', data: null })
+        ws.current!.send(mesGetMessage)
       }
 
-      //* 2-й способ обработки получения сообщения
-      // ws.onmessage = (event) => {
-      //   const mesSocket: EventsSocket = JSON.parse(event.data)
-      //   // логика обработки
-      // }
+      ws.current.onmessage = (event) => {
+        const mesSocket: EventsSocket = JSON.parse(event.data)
+          // console.log('mesSocket', mesSocket) //* debug
 
-      ws.onclose = (event) => {
+          switch (mesSocket.type) {
+            case 'ADD_SURROGATE': {
+              const mes: Surrogate[] = JSON.parse(mesSocket.data)
+              setSurrogates([...mes])
+              break
+            }
+            case 'GET_MESSAGE':
+            case 'NEW_MESSAGE': {
+              const mes: Message[] = JSON.parse(mesSocket.data)
+              setMessages([...mes])
+              break
+            }
+          }
+      }
+
+      ws.current.onclose = (event) => {
         if (event.wasClean) {
           console.log('Соединение закрыто чисто')
         } else {
@@ -76,15 +98,9 @@ export const SimpleChat: FC<IProps> = () => {
         console.log(`Код: ${event.code} причина: ${event.reason}`)
       }
 
-      ws.onerror = (error) => {
+      ws.current.onerror = (error) => {
         console.log(`Ошибка ${(error as ErrorEvent).message}`)
       }
-
-      const mesConnect = JSON.stringify({ type: 'ADD_SURROGATE', data: surrogate })
-      ws.send(mesConnect)
-
-      const mesGetMessage = JSON.stringify({ type: 'GET_MESSAGE', data: null })
-      ws.send(mesGetMessage)
     }
   }, [isWelcome])
 
@@ -93,20 +109,20 @@ export const SimpleChat: FC<IProps> = () => {
   }
 
   const handleConnect = (name: string) => {
-    setSurrogate(name)
+    setSurrogateName(name)
     setIsWelcome(false)
   }
 
   const handleSendMessage = () => {
     if (newMessage.current && newMessage.current.value) {
       const newMes: Message = {
-        author: surrogate,
+        author: surrogateName,
         text: newMessage.current!.value,
         date: new Date()
       }
 
       const mes = JSON.stringify({ type: 'NEW_MESSAGE', data: newMes })
-      ws.send(mes)
+      if (ws.current) ws.current.send(mes)
 
       newMessage.current.value = ''
     }
@@ -130,6 +146,10 @@ export const SimpleChat: FC<IProps> = () => {
     )
   }
 
+  if (!isConnected && !isWelcome) {
+    return <div className={styles.centered}>ERROR</div>
+  }
+
   return (
     <div className={styles.centered}>
       <div className={styles.container}>
@@ -142,9 +162,12 @@ export const SimpleChat: FC<IProps> = () => {
             </button>
           </div>
           <div className={styles.list}>
-            {messages.map((mes) => (
-              <div className={cn(styles.mes_wrapper, { [styles.mes_author]: mes.author === surrogate })}>
-                <MessageCard key={mes.date.toLocaleString()} text={mes.text} author={mes.author} date={mes.date} />
+            {messages.map((mes, index) => (
+              <div
+                key={index}
+                className={cn(styles.mes_wrapper, { [styles.mes_author]: mes.author === surrogateName })}
+              >
+                <MessageCard text={mes.text} author={mes.author} date={mes.date} />
               </div>
             ))}
           </div>
@@ -153,8 +176,8 @@ export const SimpleChat: FC<IProps> = () => {
         <div className={styles.sub_container}>
           <h2 className={styles.title}>Подключены к матрице</h2>
           <div className={styles.list}>
-            {surrogates.map((surrogate, index) => (
-              <div key={index}>{surrogate}</div>
+            {surrogates.map((surrogate) => (
+              <div key={surrogate.id}>{surrogate.name}</div>
             ))}
           </div>
         </div>
